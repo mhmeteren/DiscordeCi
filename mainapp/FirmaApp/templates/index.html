@@ -46,7 +46,7 @@
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
-                <a href="{% url 'index'%}" class="navbar-brand mx-4 mb-3">
+                <a href="{% url 'firma_index'%}" class="navbar-brand mx-4 mb-3">
                     <h3 class="text-primary"><i class="fa me-2"></i>{{adi}}</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="{% url 'index'%}" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="{% url 'firma_index'%}" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 
                    <!-- <a href="#" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Settings</a>
                     <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
@@ -158,7 +158,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             
-                            <a href="{% url 'logout'%}" class="dropdown-item">Log Out</a>
+                            <a href="{% url 'firma_logout'%}" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
                 </div>
@@ -295,7 +295,7 @@
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Firmalar</a>, Tüm işlemeler 
+                            &copy; <a href="{% url 'firma_index'%}">Firmalar</a>, Tüm işlemeler 
                         </div>
                        
                     </div>

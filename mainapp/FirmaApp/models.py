@@ -1,6 +1,5 @@
-from xml.etree.ElementInclude import default_loader
 from django.db import models
-
+from hashlib import sha256
 
 class Firma(models.Model):
 
@@ -16,6 +15,8 @@ class Firma(models.Model):
 
     class Meta:
         db_table = "Firma"
+        verbose_name = "Firma"
+        verbose_name_plural = "Firmalar"
     
     def __str__(self):
         return self.FirmaADI
@@ -24,13 +25,16 @@ class Firma(models.Model):
         firma = Firma.objects.filter(FirmaEMAIL=self.FirmaEMAIL, FirmaSIFRE=self.FirmaSIFRE).first()
         return firma
 
+    def save(self):
+        self.FirmaSIFRE = sha256(self.FirmaSIFRE.encode('utf-8')).hexdigest()
+        super(Firma, self).save()
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
 
 class Discord(models.Model):
     DiscordID = models.AutoField(primary_key=True)
-    FirmaID = models.BigIntegerField() #models.ForeignKey(Firma, on_delete=models.CASCADE)
+    FirmaID = models.ForeignKey(Firma, on_delete=models.CASCADE)
     DiscordANLIKUYE = models.BigIntegerField()
     DiscordMAXUYE = models.BigIntegerField()
     DiscordANLIKSATIS = models.BigIntegerField()
@@ -39,7 +43,8 @@ class Discord(models.Model):
     DiscordANLIKCALISAN = models.BigIntegerField()
     DiscordSupport = models.BigIntegerField()
     class Meta:
-        db_table = "Discord"    
+        db_table = "Discord"
+         
 
     def get_Discord_Status(self):
         return Discord.objects.get(FirmaID=self.FirmaID)
