@@ -24,7 +24,7 @@ def login(request):
             request.session["UyeUSERNAME"] =  user.UyeUSERNAME
             request.session["UyeEMAIL"] =  user.UyeEMAIL
             request.session["UyeWALLET"] =  str(user.UyeWALLET)
-            request.session["UyeDURUM"] =  str(user.UyeDURUM)
+            request.session["UyeDURUM"] =  int(user.UyeDURUM)
             
             
             return redirect("user_index")
@@ -36,16 +36,31 @@ def logout(request):
     request.session.flush()
     return redirect('user_login')
 
+def refreshAcc(request, UserID: int):
+    user = Uye.objects.filter(UyeID=UserID).first()
+    if user:
+        request.session["UyeID"] =  user.UyeID
+        request.session["DiscordID"] =  user.DiscordID
+        request.session["UyeUSERNAME"] =  user.UyeUSERNAME
+        request.session["UyeEMAIL"] =  user.UyeEMAIL
+        request.session["UyeWALLET"] =  str(user.UyeWALLET)
+        request.session["UyeDURUM"] =  int(user.UyeDURUM)
+
+  
+
 def index(request):
     if request.session.get('UyeID') is None:
         return redirect('user_login')
 
-    acc = UyeAcc(UyeID=Uye(UyeID=int(request.session.get('UyeID'))))
+    UserID = int(request.session.get('UyeID'))
+    acc = UyeAcc(UyeID=Uye(UyeID=UserID))
     acclist = acc.get_All_Firma()
+    refreshAcc(request, UserID)
     content = { 
         'session': request.session,
         'acclist': acclist,
     }
+
     return render(request, 'UserHome.html', context=content)
 
 def account(request, userid= None, firmaid= None, isacc= None):
@@ -80,3 +95,13 @@ def signup(request):
             })
 
     return render(request, 'signup.html')
+
+
+def settings(request):
+    UserID = int(request.session.get('UyeID'))
+    refreshAcc(request, UserID)
+    content = { 
+        'session': request.session,
+    }
+    print(request.session.get('UyeDURUM'))
+    return render(request, 'settings.html', context=content)

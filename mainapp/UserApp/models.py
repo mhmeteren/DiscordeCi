@@ -64,3 +64,22 @@ class UyeAdres(models.Model):
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 
+class WalletLogStatus(models.TextChoices):
+    YUKLEME = 'YUKLEME', 'Yükleme'
+    ALISVERIS = 'ALISVERIS', 'AlisVeris'
+
+    
+
+class UyeWalletLog(models.Model):
+
+    UyeWalletLogID = models.AutoField(primary_key=True)
+    UyeID = models.ForeignKey(Uye, on_delete=models.CASCADE, name = "UyeID")
+    UyeWALLET = models.DecimalField(max_digits=15, decimal_places=2)
+    UyeWalletLogIslem = models.CharField(max_length=50, choices=WalletLogStatus.choices)
+    UyeWalletLogAmount = models.DecimalField(max_digits=15, decimal_places=2)
+    UyeWalletLogTARIH = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "UyeWalletLog"
+
+#-----------------------------------------------------------------------------------------------------------------------------------

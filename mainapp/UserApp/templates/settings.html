@@ -57,10 +57,10 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="{% url 'user_index'%}" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a href="{% url 'user_settings'%}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Settings</a>
-                    
-                     <!-- <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
+                    <a href="{% url 'user_index'%}" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                
+                    <a href="{% url 'user_settings' %}" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>Settings</a>
+                   <!-- <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
                     <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
@@ -88,11 +88,12 @@
                     <i class="fa fa-bars"></i>
                 </a>
                
+               
                 <div class="navbar-nav align-items-center ms-auto">
-                  <div class="nav-item dropdown">
+                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fa fa-wallet me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">{{session.UyeWALLET}}</span>
+                            <span class="d-none d-lg-inline-flex">${{session.UyeWALLET}}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">
@@ -109,32 +110,7 @@
                         
                     </div>
 
-                    
-
-                      <!--<div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fa fa-bell me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Notificatin</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Profile updated</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">New user added</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Password changed</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all notifications</a>
-                        </div>
-                    </div>--> 
+                
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                            <span class="d-none d-lg-inline-flex">{{session.UyeUSERNAME}}</span>
@@ -144,99 +120,139 @@
                             <a href="{% url 'user_logout'%}" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
-                    
                 </div>
             </nav>
             <!-- Navbar End -->
 
-
-            <!-- Sale & Revenue Start -->
-            <div class="container-fluid pt-4 px-4">
+               <!-- Form Start -->
+               <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                            <i  class="fa fa-comments  fa-3x text-primary"></i>
-                            <div class="ms-3" >
-                                <p class="mb-2" >Anlık Support </p>
-                                <h6 class="mb-0">{{discord.DiscordSupport}}</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                            <i class="fa fa-chart-bar fa-3x text-primary"></i>
-                            <div class="ms-3">
-                                <p class="mb-2">Toplam Satış</p>
-                                <h6 class="mb-0">{{discord.DiscordTOPSATIS}}</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                            <i class="fa fa-chart-area fa-3x text-primary"></i>
-                            <div class="ms-3">
-                                <p class="mb-2">Anlık Satış</p>
-                                <h6 class="mb-0">{{discord.DiscordANLIKSATIS}}</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                            <i class="fa fa-users fa-3x text-primary"></i>
-                            <div class="ms-3">
-                                <p class="mb-2">Aktif / Toplam Kullanıcı</p>
-                                <h6 class="mb-0">{{discord.DiscordANLIKUYE}} / {{discord.DiscordMAXUYE}}</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Sale & Revenue End -->
-
-
-       
-
-
-            <!-- Recent Sales Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-light text-center rounded p-4">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Tüm Çalışanlar </h6>
-                        
-                        <a href="">Diğer</a>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table text-start align-middle table-bordered table-hover mb-0">
-                            <thead>
-                                <tr class="text-dark">
-                         
-                                    <th scope="col">Tarih</th>
-                                    <th scope="col">Firma</th>
-                                    <th scope="col">Durum</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for acc in acclist%}
-                                <tr>
-                                    <td>{{acc.UyeAccTARIH}}</td>
-                                    <td>{{acc.FirmaID.FirmaADI}}</td>
-                                    {%if acc.UyeAccDURUM%}
-                                    <td><a class="btn btn-sm btn-success" href="{%url 'user_account' acc.UyeID.UyeID acc.FirmaID.FirmaID 0%}">Aktif</a></td>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Hesap Yönetim</h6>
+                            <form action="#" method="post">
+                                {%csrf_token%}
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="inputEmail3" name="username" value={{session.UyeUSERNAME}}>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="inputPassword3" value={{session.UyeEMAIL}}>
+                                    </div>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    {% if session.UyeDURUM%}
+                                    <input type="checkbox" class="form-check-input" id="exampleCheck1" checked>
                                     {%else%}
-                                    <td><a class="btn btn-sm btn-danger" href="{%url 'user_account' acc.UyeID.UyeID acc.FirmaID.FirmaID 1%}">Pasif</a></td>
+                                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
                                     {%endif%}
-                                </tr>
-                                {%endfor%}
-                            </tbody>
-                        </table>
+                                    
+                                    
+                                    <label class="form-check-label" for="exampleCheck1">Discord Hesap Durum</label>
+                                </div>
+                                {% if Accsuccess%}
+                                <div class="alert alert-success"> {{Accsuccess}} </div>
+                                {%endif%}
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </form>
+                        </div>
                     </div>
-                   
+                    
+
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Şifre Yönetim</h6>
+                            <form action="#" method="post">
+                                {%csrf_token%}
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="inputEmail3" name="mypassword">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">New Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="inputEmail3" name="newpassword">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">*New Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="inputEmail3" name="newpasswordagain">
+                                    </div>
+                                </div>
+                                {% if errorPassword %}
+                                 <div class="alert alert-danger"> {{errorPassword}} </div>
+                                {%endif%}
+                                {% if successPassword%}
+                                <div class="alert alert-success"> {{successPassword}} </div>
+                                {%endif%}
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Discord</h6>
+                            <form action="#" method="post">
+                                {%csrf_token%}
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Discord ID</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="inputEmail3" name="mydiscordid">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">New Discord ID</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="inputEmail3" name="newdiscordid">
+                                    </div>
+                                </div>
+                                {% if errorDiscordid %}
+                                 <div class="alert alert-danger"> {{errorDiscordid}} </div>
+                                {%endif%}
+                                {% if successDiscordid%}
+                                <div class="alert alert-success"> {{successDiscordid}} </div>
+                                {%endif%}
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    
+
+
+
+
+
+                 
                 </div>
             </div>
-            <!-- Recent Sales End -->
 
 
-       
+           
+
+
+
+                 
+                </div>
+            </div>
+
+
+            <!-- Form End -->
+
+
+               
+                <!-- Form End -->
+               
+
 
 
             <!-- Footer Start -->
@@ -244,7 +260,7 @@
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="{% url 'user_index'%}">User</a>, Tüm işlemeler 
+                            &copy; <a href="#">Firmalar</a>, Tüm işlemeler 
                         </div>
                        
                     </div>
