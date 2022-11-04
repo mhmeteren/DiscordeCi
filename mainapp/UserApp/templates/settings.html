@@ -60,17 +60,16 @@
                     <a href="{% url 'user_index'%}" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 
                     <a href="{% url 'user_settings' %}" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>Settings</a>
-                   <!-- <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
+                        <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Widgets</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="signin.html" class="dropdown-item">Sign In</a>
-                            <a href="signup.html" class="dropdown-item">Sign Up</a>
-                            <a href="404.html" class="dropdown-item">404 Error</a>
-                            <a href="blank.html" class="dropdown-item">Blank Page</a>
+                            <a href="#" onclick="getPage('H', 'HB')" id="HB" class="dropdown-item">Hesap Yönetim</a>
+                            <a href="#" onclick="getPage('P', 'PB')" id="PB" class="dropdown-item ">Parola Yönetim</a>
+                            <a href="#" onclick="getPage('D', 'DB')" id="DB" class="dropdown-item ">Discord</a>
+                            <a href="#" onclick="getPage('A', 'AB')" id="AB" class="dropdown-item">Adres Yönetimi</a>
+                            <a href="#" onclick="getPage('TA', 'TAB')" id="TAB" class="dropdown-item">Tüm Adresler</a>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
             </nav>
         </div>
@@ -125,108 +124,238 @@
             <!-- Navbar End -->
 
                <!-- Form Start -->
-               <div class="container-fluid pt-4 px-4">
+               <div class="container-fluid pt-4 px-4" >
                 <div class="row g-4">
-                    <div class="col-sm-12 col-xl-6">
+                    <div class="col-sm-12 col-xl-6" id="H" style="display: none" >
                         <div class="bg-light rounded h-100 p-4">
                             <h6 class="mb-4">Hesap Yönetim</h6>
-                            <form action="#" method="post">
+                            <form action="{% url 'user_accupdate' %}" method="post">
                                 {%csrf_token%}
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="inputEmail3" name="username" value={{session.UyeUSERNAME}}>
+                                        <input type="text" class="form-control"  name="username" value={{session.UyeUSERNAME}} required>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputPassword3" class="col-sm-2 col-form-label">Email</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="inputPassword3" value={{session.UyeEMAIL}}>
+                                        <input type="email" class="form-control" name="email"  value={{session.UyeEMAIL}} required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control"  name="mypassword" required>
                                     </div>
                                 </div>
                                 <div class="mb-3 form-check">
-                                    {% if session.UyeDURUM%}
-                                    <input type="checkbox" class="form-check-input" id="exampleCheck1" checked>
-                                    {%else%}
-                                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                    {%endif%}
+                                    
+                                    <input type="checkbox" class="form-check-input" name="dc"  {% if session.UyeDURUM%} checked {%endif%}>
+                                   
                                     
                                     
                                     <label class="form-check-label" for="exampleCheck1">Discord Hesap Durum</label>
                                 </div>
-                                {% if Accsuccess%}
+                                {% if Accsuccess is not None%}
                                 <div class="alert alert-success"> {{Accsuccess}} </div>
+                                {%endif%}
+                                {% if Accerror is not None%}
+                                <div class="alert alert-danger"> {{Accerror}} </div>
                                 {%endif%}
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </form>
                         </div>
                     </div>
-                    
-
-                    <div class="col-sm-12 col-xl-6">
+                   
+                    <div class="col-sm-12 col-xl-6" id="P" style="display: none">
                         <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">Şifre Yönetim</h6>
-                            <form action="#" method="post">
+                            <h6 class="mb-4">Parola Yönetim</h6>
+                            <form action="{% url 'user_passupdate' %}" method="post">
                                 {%csrf_token%}
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Password</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="inputEmail3" name="mypassword">
+                                        <input type="password" class="form-control"  name="mypassword" required>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">New Password</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="inputEmail3" name="newpassword">
+                                        <input type="password" class="form-control"  name="newpassword" required>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">*New Password</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="inputEmail3" name="newpasswordagain">
+                                        <input type="password" class="form-control"  name="newpasswordagain" required>
                                     </div>
                                 </div>
-                                {% if errorPassword %}
+                                {% if errorPassword is not None%}
                                  <div class="alert alert-danger"> {{errorPassword}} </div>
                                 {%endif%}
-                                {% if successPassword%}
+                                {% if successPassword is not None%}
                                 <div class="alert alert-success"> {{successPassword}} </div>
                                 {%endif%}
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </form>
                         </div>
                     </div>
+                    {% if errorPassword is not None or successPassword is not None%}
+                    <script>
+                    document.getElementById('P').style.display = "block"
+                    document.getElementById('PB').className = "dropdown-item active"
+                    </script>
+                    {%endif%}
+                   
 
-                    <div class="col-sm-12 col-xl-6">
+                    <div class="col-sm-12 col-xl-6" id="D" style="display: none">
                         <div class="bg-light rounded h-100 p-4">
                             <h6 class="mb-4">Discord</h6>
-                            <form action="#" method="post">
+                            {% if session.DiscordID is not None%}
+                            <form action="{% url 'user_dcupdate' %}" method="post">
                                 {%csrf_token%}
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" name="mypassword" required>
+                                    </div>
+                                </div>
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Discord ID</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="inputEmail3" name="mydiscordid">
+                                        <input type="password" class="form-control"  minlength="18" name="mydiscordid" required>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">New Discord ID</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="inputEmail3" name="newdiscordid">
+                                        <input type="password" class="form-control" minlength="18"  name="newdiscordid" required>
                                     </div>
                                 </div>
-                                {% if errorDiscordid %}
+                                {% if errorDiscordid is not None%}
                                  <div class="alert alert-danger"> {{errorDiscordid}} </div>
                                 {%endif%}
-                                {% if successDiscordid%}
+                                {% if successDiscordid is not None%}
                                 <div class="alert alert-success"> {{successDiscordid}} </div>
+                                {%endif%}
+
+                                {% if passwdsucc is not None%}
+                                <div class="alert alert-success"> {{passwdsucc}} </div>
+                                {%endif%}
+                                {% if answer is not None%}
+                                <div class="alert alert-success"> {{answer}} </div>
+                                <div class="alert alert-danger"> Eğer sunucuya üye değilseniz Signup sayfasındaki Discord button una tıklayın </div>
+                                {%endif%}
+
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </form>
+                           
+                            {%else%}
+                            <form action="{% url 'user_dcsave' %}" method="post" id="NEWD" >
+                                {%csrf_token%}
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" name="mypassword" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Discord ID</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" minlength="18"  name="newdiscordid" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                {% if passwd is not None%}
+                                 <div class="alert alert-danger"> {{passwd}} </div>
+                                {%endif%}
+                               
+                            </form>
+                            {%endif%}
+                        </div>
+                    </div>
+                    {% if errorDiscordid is not None or successDiscordid is not None or  passwd is not None or answer is not None%}
+                    <script>
+                    document.getElementById('D').style.display = "block"
+                    document.getElementById('DB').className = "dropdown-item active"
+                    </script>
+                    {%endif%}
+
+                    <div class="col-sm-12 col-xl-6" id="A" style="display: block">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Adres Yönetim</h6>
+                            <form action="{% url 'user_adressave' %}" method="post">
+                                {%csrf_token%}
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Başlık</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" maxlength="50" name="baslik" placeholder="örn: Ev" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Alıcı</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" maxlength="50"  name="alici" placeholder="Adı - Soyadı" required>
+                                    </div>
+                                </div>
+                                <div class="form-floating">
+                                    <textarea class="form-control"  name="adres" maxlength="300" id="floatingTextarea" style="height: 150px;" required></textarea>
+                                    <label for="floatingTextarea">Adres</label>
+                                </div>
+                                <br>
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">GSM</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" maxlength="11"  name="gsm" placeholder="05000000000" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">TC</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" maxlength="11"  name="tc" placeholder="00000000000" required>
+                                    </div>
+                                </div>
+
+                                {% if Adres is not None%}
+                                <div class="alert alert-success"> {{Adres}} </div>
                                 {%endif%}
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </form>
                         </div>
                     </div>
 
+                    <div class="col-sm-12 col-xl-6" id="TA" style="display: block">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Tüm Adresler</h6>
+                                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                    <thead>
+                                        <tr class="text-dark">
+                                 
+                                            <th scope="col">Başlık</th>
+                                            <th scope="col">Alıcı</th>
+                                            <th scope="col"></th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {%for adres in adresList%}
+                                        <tr>
+                                            <td>{{adres.UyeAdresBASLIK}}</td>
+                                            <td>{{adres.UyeAdresALICI}}</td>
+                                            <td><a class="btn btn-sm btn-success" href="#">Düzenle</a></td>
+                                            <td><a class="btn btn-sm btn-danger" href="{%url 'user_adresdel' adres.UyeAdresID%}">Sil</a></td>
+                                        </tr>
+                                        {%endfor%}
+                                        
+                                        
+                                    </tbody>
+                                </table>
+                          
+                           
+                        </div>
+                    </div>
 
-                    
 
 
 
@@ -260,7 +389,7 @@
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Firmalar</a>, Tüm işlemeler 
+                            &copy; <a href="#">User</a>, Tüm işlemeler 
                         </div>
                        
                     </div>
@@ -274,6 +403,25 @@
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
+
+
+    <script>
+        
+        function getPage(page, btn){
+            if(document.getElementById(page).style.display == "none"){
+                document.getElementById(page).style.display = "block"
+                document.getElementById(btn).className = "dropdown-item active"
+            }
+            else
+            {
+                document.getElementById(page).style.display = "none"
+                document.getElementById(btn).className = "dropdown-item"
+            }
+
+        }
+        
+       
+    </script>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
