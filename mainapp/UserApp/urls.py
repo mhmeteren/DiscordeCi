@@ -13,4 +13,5 @@ urlpatterns = [
     path('dcsave/', views.DcSave, name='user_dcsave'),
     path('adressave/', views.AdresSave, name='user_adressave'),
     path('adresdel/<int:adresid>/', views.AdresDelete, name='user_adresdel'),
+    path('adresup/<int:adresid>/', views.AdresUpdate, name='user_adresup'),
 ]

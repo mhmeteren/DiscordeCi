@@ -7,13 +7,14 @@ from .models import Uye, UyeAcc,Firma, UyeDiscordLog, UyeAdres
 def getHASH(password):
     return sha256(password.encode('utf-8')).hexdigest()
 
-def isAuth(request):
-    return redirect('user_login') if request.session.get('UyeID') is None else 1
+
+    
+    
 
 
 def login(request):
-    if isAuth(request):
-        return redirect('user_index')
+    if request.session.get('UyeID') is not None:
+        return redirect("user_index")
         
     if request.method == 'POST':
         passwd = getHASH(request.POST["password"])
@@ -27,6 +28,7 @@ def login(request):
             })
         
         else:
+            request.session.modified = True
             request.session["UyeID"] =  user.UyeID
             request.session["DiscordID"] =  user.DiscordID
             request.session["UyeUSERNAME"] =  user.UyeUSERNAME
@@ -57,8 +59,11 @@ def refreshAcc(request, UserID: int):
   
 
 def index(request):
-    isAuth(request)
-    UserID = int(request.session.get('UyeID'))
+   
+    try:
+        UserID = int(request.session.get('UyeID'))
+    except TypeError:
+        return redirect('user_login')
     acc = UyeAcc(UyeID=Uye(UyeID=UserID))
     acclist = acc.get_All_Firma()
     refreshAcc(request, UserID)
@@ -70,13 +75,16 @@ def index(request):
     return render(request, 'UserHome.html', context=content)
 
 def allAccounts(request, userid= None, firmaid= None, isacc= None):
-    isAuth(request)
+    try:
+        UserID = int(request.session.get('UyeID'))
+    except TypeError:
+        return redirect('user_login')
     UyeAcc.objects.filter(UyeID=Uye(UyeID=userid), FirmaID=Firma(FirmaID=firmaid)).update(UyeAccDURUM=bool(isacc))
     return redirect("user_index")
     
 def signup(request):
-    if isAuth(request):
-        return redirect('user_index')
+    if request.session.get('UyeID') is not None:
+        return redirect("user_index")
     
     if request.method == 'POST':
         """
@@ -103,8 +111,11 @@ def signup(request):
 
 
 def settings(request):
-    isAuth(request)
-    UserID = int(request.session.get('UyeID'))
+    
+    try:
+        UserID = int(request.session.get('UyeID'))
+    except TypeError:
+        return redirect('user_login')
     refreshAcc(request, UserID)
     adresList = getAdresList(UserID)
     content = { 
@@ -114,10 +125,13 @@ def settings(request):
     return render(request, 'settings.html', context=content)
 
 def AccUpdate(request):
-    isAuth(request)
+    try:
+        UserID = int(request.session.get('UyeID'))
+    except TypeError:
+        return redirect('user_login')
 
     if request.method == 'POST':
-        if Uye.objects.filter(UyeID=int(request.session.get('UyeID')), UyePASSWORD=getHASH(request.POST["mypassword"])).first() is None:
+        if Uye.objects.filter(UyeID=UserID, UyePASSWORD=getHASH(request.POST["mypassword"])).first() is None:
             return render(request, 'settings.html', {
                 'session': request.session,
                 'Accerror': 'Girilen parola yanlış'
@@ -154,10 +168,13 @@ def AccUpdate(request):
         return render(request, 'settings.html', context=content)
 
 def PassUpdate(request):
-    isAuth(request)
+    try:
+        UserID = int(request.session.get('UyeID'))
+    except TypeError:
+        return redirect('user_login')
     
     if request.method == 'POST':
-        if Uye.objects.filter(UyeID=int(request.session.get('UyeID')), UyePASSWORD=getHASH(request.POST["mypassword"])).first() is None:
+        if Uye.objects.filter(UyeID=UserID, UyePASSWORD=getHASH(request.POST["mypassword"])).first() is None:
             return render(request, 'settings.html', {
                 'session': request.session,
                 'errorPassword': 'Girilen parola yanlış!',
@@ -177,7 +194,7 @@ def PassUpdate(request):
             })
 
         
-        Uye.objects.filter(UyeID=int(request.session.get('UyeID'))).update(UyePASSWORD=getHASH(request.POST["newpassword"]))
+        Uye.objects.filter(UyeID=UserID).update(UyePASSWORD=getHASH(request.POST["newpassword"]))
         return render(request, 'settings.html', {
                 'session': request.session,
                 'successPassword': 'Parolanız başarılı bir şekilde güncellendi',
@@ -185,8 +202,11 @@ def PassUpdate(request):
   
 
 def DcUpdate(request):
-    isAuth(request)
-    userID = int(request.session.get('UyeID'))
+    try:
+        userID = int(request.session.get('UyeID'))
+    except TypeError:
+        return redirect('user_login')
+
     if request.method == 'POST':
         DiscordID = str(request.POST["mydiscordid"]).replace(' ','')[:18]
         if Uye.objects.filter(UyeID=userID, UyePASSWORD=getHASH(request.POST["mypassword"])).first() is None:
@@ -225,8 +245,11 @@ def DcUpdate(request):
         
 
 def DcSave(request):
-    isAuth(request)
-    userID = int(request.session.get('UyeID'))
+    try:
+        userID = int(request.session.get('UyeID'))
+    except TypeError:
+        return redirect('user_login')
+   
     if request.method == 'POST':
         if Uye.objects.filter(UyeID=userID, UyePASSWORD=getHASH(request.POST["mypassword"])).first() is None:
             return render(request, 'settings.html', {
@@ -257,8 +280,10 @@ def getAdresList(UserID):
     return UyeAdres.objects.filter(UyeID=(Uye(UyeID=UserID)))
     
 def AdresSave(request):
-    isAuth(request)
-    userID = int(request.session.get('UyeID'))
+    try:
+        userID = int(request.session.get('UyeID'))
+    except TypeError:
+        return redirect('user_login')
     if request.method == 'POST':
         adres = UyeAdres(UyeID=(Uye(UyeID=userID)), UyeAdresBASLIK=request.POST["baslik"][:50],
         UyeAdresALICI=request.POST["alici"][:50], UyeAdres=request.POST["adres"][:300],
@@ -274,8 +299,11 @@ def AdresSave(request):
             })
        
 def AdresDelete(request, adresid):
-    isAuth(request)
-    userID = int(request.session.get('UyeID'))
+    try:
+        userID = int(request.session.get('UyeID'))
+    except TypeError:
+        return redirect('user_login')
+    
     if UyeAdres.objects.filter(UyeID=(Uye(UyeID=userID)), UyeAdresID=adresid) is not None:
         UyeAdres.objects.filter(UyeAdresID=adresid).delete()
 
@@ -285,4 +313,35 @@ def AdresDelete(request, adresid):
                 'adresList': adresList
             })
 
-    
+
+def AdresUpdate(request, adresid):
+    try:
+        userID = int(request.session.get('UyeID'))
+    except TypeError:
+        return redirect('user_login')
+
+    if request.method == 'POST':
+        if UyeAdres.objects.filter(UyeID=(Uye(UyeID=userID)), UyeAdresID=adresid) is not None:
+
+            UyeAdres.objects.filter(UyeID=(Uye(UyeID=userID)), UyeAdresID=adresid).update(
+            UyeAdresBASLIK=request.POST["baslik"][:50],
+            UyeAdresALICI=request.POST["alici"][:50], UyeAdres=request.POST["adres"][:300],
+            UyeAdresALICIGSM=request.POST["gsm"][:11], UyeAdresALICITC=request.POST["tc"][:11])
+
+        adresList = getAdresList(userID)
+        return render(request, 'settings.html', {
+                    'session': request.session,
+                    'adresList': adresList
+                })
+
+
+        
+
+    if UyeAdres.objects.filter(UyeID=(Uye(UyeID=userID)), UyeAdresID=adresid) is not None:
+        adres = UyeAdres.objects.filter(UyeID=(Uye(UyeID=userID)), UyeAdresID=adresid).first()
+        adresList = getAdresList(userID)
+        return render(request, 'settings.html', {
+                    'session': request.session,
+                    'adresList': adresList,
+                    'adresUpdate': adres
+                })
