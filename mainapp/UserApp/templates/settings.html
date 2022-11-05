@@ -70,6 +70,7 @@
                             <a href="#" onclick="getPage('A', 'AB')" id="AB" class="dropdown-item">Adres Yönetimi</a>
                             <a href="#" onclick="getPage('TA', 'TAB')" id="TAB" class="dropdown-item">Tüm Adresler</a>
                             <a href="#" onclick="getPage('WALLET', 'WALLETB')" id="WALLETB" class="dropdown-item">Bakiye Yükleme</a>
+                            <a href="#" onclick="getPage('WALLETLOG', 'WALLETLOGB')" id="WALLETLOGB" class="dropdown-item">Cüzdan Geçmişi</a>
                         </div>
                     </div>
                 </div>
@@ -97,15 +98,23 @@
                             <span class="d-none d-lg-inline-flex">${{session.UyeWALLET}}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
                                     <i class="rounded-circle fa fa-wallet me-lg-2"  style="width: 40px; height: 40px;"></i>
+                                    {%if WalletDate%}
                                     <div class="ms-2">
-                                        <h6  class="fw-normal mb-0">Bakiye Yükle Miktar</h6>
-                                        <small>Son yükleme  tarih</small>
+                                        <h6  class="fw-normal mb-0">{{WalletDate.UyeWalletLogTARIH}}</h6>
+                                        <small style="color:Green ;">+${{WalletDate.UyeWalletLogAmount}}</small>
                                     </div>
+                                    {%else%}
+                                    <div class="ms-2">
+                                        <h6  class="fw-normal mb-0">Cüzden Geçmişi Yok</h6>
+                                    </div>
+                                    {%endif%}
                                 </div>
                             </a>
+                            
                         </div>
                         
                         
@@ -407,34 +416,35 @@
 
 
 
-                    <div class="col-sm-12 col-xl-6" id="WALLET" style="display: block">
+                    <div class="col-sm-12 col-xl-6" id="WALLET" style="display: none">
                         <div class="bg-light rounded h-100 p-4">
                             <h6 class="mb-4">Bakiye Yükleme</h6>
-                            <form action="#" method="POST">
+                            <form action="{% url 'user_checkout' %}" method="POST">
                                 {%csrf_token%}
                                 <div class="row">
                                   
                         
                                   <div class="col-50">
-                                    
+                                    <label for="cname">Amount</label>
+                                    <input name="amount" class="tarih" type="number" min=100 step=".01" required>
                                 
                                     <label for="cname">Name on Card</label>
-                                    <input type="text" id="cname" name="cardname" >
+                                    <input type="text" id="cname" name="cardname" required>
                                     <label for="ccnum">Credit card number</label>
-                                    <input type="text" id="ccnum" name="cardnumber" placeholder="1111222233334444">
+                                    <input type="text" id="ccnum" name="cardnumber"  maxlength="16" minlength="16" placeholder="1111222233334444" required>
                                     
                         
                                     <div class="row">
                                       <div class="col-50">
                                         <label for="expmonth">Exp Month</label>
-                                        <input type="number" class="tarih"  id="themonth" name="month" max="12" min="1" value="6" >
+                                        <input type="number" class="tarih"  id="themonth" name="month" max="12" min="1" value="6" required>
                                       </div>
                                       <div class="col-50">
                                         <label for="expyear">Exp Year</label>
-                                        <input id="theyear" type="number" class="tarih"  name="year" step="1" >
+                                        <input id="theyear" type="number" class="tarih"  name="year" step="1" required>
                                         
                                         <label for="cvv">CVV</label>
-                                        <input type="text" id="cvv" name="cvv" maxlength="3" placeholder="000">
+                                        <input type="text" id="cvv" name="cvv" maxlength="3" placeholder="000" required>
                                         
                                       </div>
                                     </div>
@@ -463,8 +473,60 @@
             <br>
            
 
+            <div class="col-sm-12 col-xl-6" id="WALLETLOG" style="display: none">
+                <div class="bg-light rounded h-100 p-4">
+                    <h6 class="mb-4">Wallet Log</h6>
+                    
+                    {%if not WalletLog%}
+                    <div class="alert alert-secondary" role="alert">
+                        Daha önce yapılmış bir cüzdan işlemi yok!
+                    </div>
+
+                    {%else%}
+                    <small>Son 5 log</small>
+                    {%for log in WalletLog%}
+
+                    {%if log.UyeWalletLogIslem == 'ALISVERIS' %}
+                    <div class="alert alert-primary" role="alert">
+                        {{log.UyeWalletLogIslem}}
+                        <div class="alert alert-primary" role="alert">
+                            ${{log.UyeWalletLogAmount}}
+                        </div>
+                        <div role="alert">
+                            {{log.UyeWalletLogTARIH}}
+                        </div>
+                        <div style="margin-left: 0%; text-align: right;" role="alert">
+                            ${{log.UyeWALLET}}
+                        </div>
+                    </div>
+                    {%else%}
+
+                    <div class="alert alert-success" role="alert">
+                        {{log.UyeWalletLogIslem}}
+                        <div class="alert alert-success" role="alert">
+                            ${{log.UyeWalletLogAmount}}
+                        </div>
+                        <div role="alert">
+                            {{log.UyeWalletLogTARIH}}
+                        </div>
+                        <div style="margin-left: 0%; text-align: right;" role="alert">
+                            ${{log.UyeWALLET}}
+                        </div>
+                    </div>
+
+                    {%endif%}
+                    {%endfor%}
+
+                    {%endif%}
+                    
+                   
+                </div>
+            </div>
 
 
+            <br>
+            <br>
+            <br>
                  
                 </div>
             </div>

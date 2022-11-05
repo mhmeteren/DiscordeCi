@@ -98,10 +98,16 @@
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
                                     <i class="rounded-circle fa fa-wallet me-lg-2"  style="width: 40px; height: 40px;"></i>
+                                    {%if WalletDate%}
                                     <div class="ms-2">
-                                        <h6  class="fw-normal mb-0">Bakiye Yükle Miktar</h6>
-                                        <small>Son yükleme  tarih</small>
+                                        <h6  class="fw-normal mb-0">{{WalletDate.UyeWalletLogTARIH}}</h6>
+                                        <small style="color:Green ;">+${{WalletDate.UyeWalletLogAmount}}</small>
                                     </div>
+                                    {%else%}
+                                    <div class="ms-2">
+                                        <h6  class="fw-normal mb-0">Cüzden Geçmişi Yok</h6>
+                                    </div>
+                                    {%endif%}
                                 </div>
                             </a>
                         </div>

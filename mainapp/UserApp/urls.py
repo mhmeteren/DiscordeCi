@@ -14,4 +14,5 @@ urlpatterns = [
     path('adressave/', views.AdresSave, name='user_adressave'),
     path('adresdel/<int:adresid>/', views.AdresDelete, name='user_adresdel'),
     path('adresup/<int:adresid>/', views.AdresUpdate, name='user_adresup'),
+    path('checkout/', views.CheckOut, name='user_checkout'),
 ]

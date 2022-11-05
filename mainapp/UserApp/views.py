@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from hashlib import sha256
 from secrets import token_hex
-from .models import Uye, UyeAcc,Firma, UyeDiscordLog, UyeAdres
-
+from .models import Uye, UyeAcc,Firma, UyeDiscordLog, UyeAdres,  WalletLogStatus, UyeWalletLog
+from decimal import Decimal
 
 def getHASH(password):
     return sha256(password.encode('utf-8')).hexdigest()
@@ -29,13 +29,7 @@ def login(request):
         
         else:
             request.session.modified = True
-            request.session["UyeID"] =  user.UyeID
-            request.session["DiscordID"] =  user.DiscordID
-            request.session["UyeUSERNAME"] =  user.UyeUSERNAME
-            request.session["UyeEMAIL"] =  user.UyeEMAIL
-            request.session["UyeWALLET"] =  str(user.UyeWALLET)
-            request.session["UyeDURUM"] =  int(user.UyeDURUM)
-            
+            refreshAcc(request, user.UyeID)            
             
             return redirect("user_index")
 
@@ -48,6 +42,7 @@ def logout(request):
 
 def refreshAcc(request, UserID: int):
     user = Uye.objects.filter(UyeID=UserID).first()
+
     if user:
         request.session["UyeID"] =  user.UyeID
         request.session["DiscordID"] =  user.DiscordID
@@ -55,7 +50,7 @@ def refreshAcc(request, UserID: int):
         request.session["UyeEMAIL"] =  user.UyeEMAIL
         request.session["UyeWALLET"] =  str(user.UyeWALLET)
         request.session["UyeDURUM"] =  int(user.UyeDURUM)
-
+   
   
 
 def index(request):
@@ -64,12 +59,17 @@ def index(request):
         UserID = int(request.session.get('UyeID'))
     except TypeError:
         return redirect('user_login')
+        
     acc = UyeAcc(UyeID=Uye(UyeID=UserID))
     acclist = acc.get_All_Firma()
+
     refreshAcc(request, UserID)
+    WalletDate = UyeWalletLog.objects.filter(UyeID = Uye(UyeID = UserID), UyeWalletLogIslem = WalletLogStatus.YUKLEME).last()
+
     content = { 
         'session': request.session,
-        'acclist': acclist
+        'acclist': acclist,
+        'WalletDate': WalletDate
     }
 
     return render(request, 'UserHome.html', context=content)
@@ -116,11 +116,18 @@ def settings(request):
         UserID = int(request.session.get('UyeID'))
     except TypeError:
         return redirect('user_login')
+
     refreshAcc(request, UserID)
     adresList = getAdresList(UserID)
+
+    WalletDate = UyeWalletLog.objects.filter(UyeID = Uye(UyeID = UserID), UyeWalletLogIslem = WalletLogStatus.YUKLEME).last()
+    WalletLog = getWalletLog(UserID)
+
     content = { 
         'session': request.session,
-        'adresList': adresList
+        'adresList': adresList,
+        'WalletDate': WalletDate,
+        'WalletLog': WalletLog
     }
     return render(request, 'settings.html', context=content)
 
@@ -345,3 +352,36 @@ def AdresUpdate(request, adresid):
                     'adresList': adresList,
                     'adresUpdate': adres
                 })
+
+
+def CheckOut(request):
+    try:
+        userID = int(request.session.get('UyeID'))
+    except TypeError:
+        return redirect('user_login')
+    
+    if request.method == 'POST':
+        amount = Decimal(request.POST["amount"])
+        wallet = Uye.objects.get(UyeID = userID).UyeWALLET
+
+        walletLog = UyeWalletLog(UyeID = Uye(UyeID=userID), UyeWALLET = wallet, UyeWalletLogIslem = WalletLogStatus.YUKLEME,
+        UyeWalletLogAmount = amount)
+        walletLog.save()
+        
+        Uye.objects.filter(UyeID = userID).update(UyeWALLET=(wallet+amount))
+
+        WalletDate = UyeWalletLog.objects.filter(UyeID = Uye(UyeID = userID), UyeWalletLogIslem = WalletLogStatus.YUKLEME).last()
+        WalletLog = getWalletLog(userID)
+        
+        refreshAcc(request, userID)
+        return render(request, 'settings.html', {
+                    'session': request.session,
+                    'WalletDate': WalletDate,
+                    'WalletLog': WalletLog
+                })
+        
+
+def getWalletLog(userID):
+    return UyeWalletLog.objects.filter(UyeID = Uye(UyeID = userID)).reverse()[:5]
+    
+
