@@ -64,13 +64,15 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Widgets</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="#" onclick="getPage('H', 'HB')" id="HB" class="dropdown-item">Hesap Yönetim</a>
+                            <a href="#" onclick="getPage('H', 'HB')" id="HB" class="dropdown-item active">Hesap Yönetim</a>
                             <a href="#" onclick="getPage('P', 'PB')" id="PB" class="dropdown-item ">Parola Yönetim</a>
                             <a href="#" onclick="getPage('D', 'DB')" id="DB" class="dropdown-item ">Discord</a>
                             <a href="#" onclick="getPage('A', 'AB')" id="AB" class="dropdown-item">Adres Yönetimi</a>
                             <a href="#" onclick="getPage('TA', 'TAB')" id="TAB" class="dropdown-item">Tüm Adresler</a>
                             <a href="#" onclick="getPage('WALLET', 'WALLETB')" id="WALLETB" class="dropdown-item">Bakiye Yükleme</a>
                             <a href="#" onclick="getPage('WALLETLOG', 'WALLETLOGB')" id="WALLETLOGB" class="dropdown-item">Cüzdan Geçmişi</a>
+                            <a href="#" onclick="getPage('Acc', 'AccBTN')" id="AccBTN" class="dropdown-item">Alişveriş Hesap Yönetimi</a>
+                         
                         </div>
                     </div>
                 </div>
@@ -137,7 +139,7 @@
                <!-- Form Start -->
                <div class="container-fluid pt-4 px-4" >
                 <div class="row g-4">
-                    <div class="col-sm-12 col-xl-6" id="H" style="display: none" >
+                    <div class="col-sm-12 col-xl-6" id="H" style="display: block" >
                         <div class="bg-light rounded h-100 p-4">
                             <h6 class="mb-4">Hesap Yönetim</h6>
                             <form action="{% url 'user_accupdate' %}" method="post">
@@ -465,8 +467,7 @@
                     </div>
                    
                  
-                </div>
-            </div>
+            
 
             <br>
             <br>
@@ -483,7 +484,7 @@
                     </div>
 
                     {%else%}
-                    <small>Son 5 log</small>
+                    <small>Son {{WalletLog | length}} log</small>
                     {%for log in WalletLog%}
 
                     {%if log.UyeWalletLogIslem == 'ALISVERIS' %}
@@ -522,15 +523,93 @@
                    
                 </div>
             </div>
+            <br>
+            <br>
+            <br>
+           
 
 
+           
+            <div class="col-sm-12 col-xl-6" id="Acc" style="display: none">
+                <div class="bg-light rounded h-100 p-4">
+                    <h6 class="mb-4">Alişveriş Hesap Yönetimi</h6>
+                  
+                    <form action="{% url 'user_addtoken' %}" method="post">
+                        {%csrf_token%}
+                        <div class="row mb-3">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="mypassword" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Firmalar</label>
+                            <div class="col-sm-10">
+                           
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="firma" required>
+                                <option selected=""></option>
+                                {%for firma in FirmaList%}
+                                <option value="{{firma.FirmaID}}">{{firma.FirmaADI}}</option>
+                                {%endfor%}
+                    
+                            </select> 
+                        </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">TOKEN</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" minlength="128" maxlength="128"  name="token" required>
+                            </div>
+                            <button id="infobtn" onclick="document.getElementById('TOKENinfo').style.display = (document.getElementById('TOKENinfo').style.display == 'block' ? 'none' : 'block')" type="button" class="btn btn-sm btn-sm-square btn-outline-primary m-2"><i class="fa fa-info"></i></button>
+                        </div>
+                        {% if addTokenError is not None%}
+                        <div class="alert alert-danger"> {{addTokenError}} </div>
+                        {%endif%}
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                   
+                </div>
+
+                <div class="bg-light rounded h-100 p-4" id="TOKENinfo" style="display: none">
+                    <h6 class="mb-4">Info</h6>
+                    <div class="alert alert-primary mb-0" role="alert">
+                        TOKEN nasıl alınır?
+                        <div class="alert alert-primary mb-0" role="alert">
+                            1.Adım: önce ilgili firmanın sisteminde hesabınız olması gerekmektedir.
+                           
+                        </div>
+                        <div class="alert alert-primary mb-0" role="alert">
+                            2.Adım: Ilgili sisteme giriş yaptıktan sonra; Hesabım > Hesap Güvenliği sayfasından
+                            TOKEN ile girişe izin ver > TOKEN oluştur 'a tıklayıp ilgili TOKEN ı 3. kişilerle paylaşamdan
+                            ilgili alana girmeniz yeterlidir.  
+                        </div>
+                    </div>
+                   <br>
+                   <div class="alert alert-danger mb-0" role="alert">
+                    Uyarı!
+                    <div class="alert alert-danger mb-0" role="alert">
+                        Bir firma için sadece bir TOKEN eklenebilir. En son eklenen TOKEN geçerlidir!!
+                       
+                    </div>
+                  
+                </div>
+                </div>
+                {% if addTokenError is not None%}
+                    <script>
+                    document.getElementById('Acc').style.display = "block"
+                    document.getElementById('AccBTN').className = "dropdown-item active"
+                    </script>
+                {%endif%}
+            </div>
+           
             <br>
             <br>
             <br>
-                 
+
                 </div>
             </div>
-
+        </div>
+    </div>
 
             <!-- Form End -->
 
