@@ -88,7 +88,7 @@ class UyeDiscordLog(models.Model):
 
     UyeDiscordLogID = models.AutoField(primary_key=True)
     UyeID = models.ForeignKey(Uye, on_delete=models.CASCADE, name = "UyeID")
-    DiscordID = models.CharField(max_length=18, unique=True, editable=True)
+    DiscordID = models.CharField(max_length=19, unique=True, editable=True)
     TOKEN = models.CharField(max_length=18, editable=True)
     TOKENDURUM = models.BooleanField(default=False)
     UyeDiscordLogTARIH = models.DateTimeField(auto_now_add=True)

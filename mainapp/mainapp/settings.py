@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'FirmaApp.apps.FirmaappConfig',
     'UserApp.apps.UserappConfig',
 ]
@@ -109,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'tr-TR'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Istanbul'
 
