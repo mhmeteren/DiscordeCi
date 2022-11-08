@@ -122,7 +122,7 @@ def signup(request):
             })
 
 def getAllFirma():
-    return Firma.objects.all()
+    return Firma.objects.filter(FirmaDURUM=True)
      
 
 @require_http_methods(["GET"]) 

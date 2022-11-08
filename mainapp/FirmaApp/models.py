@@ -9,7 +9,6 @@ class Firma(models.Model):
     FirmaEMAIL = models.CharField(max_length=50)
     FirmaSIFRE = models.CharField(max_length=128)
     FirmaDURUM = models.BooleanField(default=False)
-    FirmaRESIMURL = models.URLField(max_length=200)
     FirmaTARIH = models.DateTimeField(auto_now_add=True)
     FirmaYONETICI = models.CharField(max_length=100)
 
