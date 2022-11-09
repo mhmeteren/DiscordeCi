@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.views.decorators.http import require_http_methods
+
+
 from hashlib import sha256
 from secrets import token_hex
 from .models import Uye, UyeAcc,Firma, UyeDiscordLog, UyeAdres,  WalletLogStatus, UyeWalletLog
@@ -223,39 +225,37 @@ def DcUpdate(request):
         return redirect('user_login')
 
     
-    DiscordID = str(request.POST["mydiscordid"]).replace(' ','')[:18]
+    
     if Uye.objects.filter(UyeID=userID, UyePASSWORD=getHASH(request.POST["mypassword"])).first() is None:
         return render(request, 'settings.html', {
             'session': request.session,
             'errorDiscordid':'Girilen parola yanlış',
         })
-    
-    if Uye.objects.filter(UyeID=userID, DiscordID=DiscordID).first() is None:
+
+    dc_log = UyeDiscordLog.objects.filter(UyeID = Uye(UyeID=userID), TOKENDURUM=False).first()
+    if  dc_log:
+        return render(request, 'settings.html', {
+            'session': request.session,
+            'errorDiscordid':'Aktif edilmemiş Discord Hesabınız mevcut!!',
+            'answer': '!activate '+ dc_log.TOKEN
+        })
+
+    if request.session.get('DiscordID') != str(request.POST["mydiscordid"]).replace(' ',''):
         return render(request, 'settings.html', {
             'session': request.session,
             'errorDiscordid':'Girilen Discord ID yanlış',
         })
-    
-    log = UyeDiscordLog.objects.filter(UyeID = Uye(UyeID=userID), DiscordID=DiscordID).first()
-    if log and not log.TOKENDURUM:
+
+
+    DiscordID = str(request.POST["newdiscordid"]).replace(' ','')
+    if len(DiscordID) != 19 or DcidControl(DiscordID, userID):
         return render(request, 'settings.html', {
             'session': request.session,
-            'errorDiscordid':'Aktif edilmemiş Discord Hesabınız mevcut!!',
-            'answer': '!activate '+ log.TOKEN
+            'errorDiscordid':'Girilen yeni Discord ID yanlış',
         })
-    
-    dc = str(request.POST["newdiscordid"]).replace(' ','')[:18]
-    Uye.objects.filter(UyeID=userID).update(DiscordID=dc)
+
         
-    Token = token_hex(9)
-    discord = UyeDiscordLog(UyeID=Uye(UyeID=userID), DiscordID=dc, TOKEN=Token)
-    discord.save()
-    refreshAcc(request, userID)
-    return render(request, 'settings.html', {
-            'session': request.session,
-            'passwdsucc':'Discord ID kaydedildi, hesabınızı onaylamak için Discord sunucumuzdan gelen bildirimi en kısa sürede doğru cevaplayın',
-            'answer': '!activate '+ Token
-        })
+    return UyeDiscordLog_Save(request, DiscordID, userID)
         
         
 @require_http_methods(["POST"])  
@@ -264,26 +264,49 @@ def DcSave(request):
         userID = int(request.session.get('UyeID'))
     except TypeError:
         return redirect('user_login')
-   
+
+    refreshAcc(request, userID)
+    dc = str(request.POST["newdiscordid"]).replace(' ','')
+
     if Uye.objects.filter(UyeID=userID, UyePASSWORD=getHASH(request.POST["mypassword"])).first() is None:
         return render(request, 'settings.html', {
             'session': request.session,
-            'passwd':'Girilen parola yanlış'
+            'passwd': 'Girilen parola yanlış'
            
-        })
-    if request.session.get("DiscordID") is None:
-        dc = str(request.POST["newdiscordid"]).replace(' ','')[:18]
-        Uye.objects.filter(UyeID=userID).update(DiscordID=dc)
-        
-        Token = token_hex(9)
-        discord = UyeDiscordLog(UyeID=Uye(UyeID=userID), DiscordID=dc, TOKEN=Token)
-        discord.save()
-        refreshAcc(request, userID)
+            })
+
+    if len(dc) != 19 or DcidControl(dc, userID):
         return render(request, 'settings.html', {
+            'session': request.session,
+            'passwd': 'Girilen Discord id  yanlış veya kullanılamaz!!'
+           
+            })
+    
+    if  UyeDiscordLog.objects.filter(UyeID = Uye(UyeID=userID), TOKENDURUM=False).first():
+        return render(request, 'settings.html', {
+            'session': request.session,
+            'passwd': 'Aktif edilmemiş Discord Hesabınız mevcut!!'
+           
+            })
+
+    return UyeDiscordLog_Save(request, dc, userID)
+
+def UyeDiscordLog_Save(request, DiscordID, userID):
+    Token = token_hex(9)
+    discord = UyeDiscordLog(UyeID=Uye(UyeID=userID), DiscordID=DiscordID, TOKEN=Token)
+    discord.save()
+    refreshAcc(request, userID)
+    return render(request, 'settings.html', {
                 'session': request.session,
-                'passwdsucc':'Discord ID kaydedildi, hesabınızı onaylamak için Discord sunucumuzdan gelen bildirimi en kısa sürede doğru cevaplayın',
+                'passwdsucc':'Discord ID kaydedildi, hesabınızı onaylamak için Discord sunucumuzda size özel kanalda ilgili cevabı 1 dk içinde girin. Aksi taktirde işlem iptal edilir',
                 'answer': '!activate '+ Token
             })
+
+
+def DcidControl(DiscordID, userID):
+    dc_user = Uye.objects.filter(DiscordID=DiscordID).first()
+    dc_log = UyeDiscordLog.objects.filter(~Q(UyeID=Uye(UyeID=userID)) ,DiscordID=DiscordID, TOKENDURUM=False).first()
+    return (dc_log is not None or dc_user is not None)
 
 
 def getAdresList(UserID):

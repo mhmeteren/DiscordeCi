@@ -6,7 +6,7 @@ from FirmaApp.models import Firma
 class Uye(models.Model):
 
     UyeID = models.AutoField(primary_key=True)
-    DiscordID = models.CharField(max_length=18, null=True, unique=True, editable=True)
+    DiscordID = models.CharField(max_length=19, null=True, unique=True, editable=True)
     UyeUSERNAME = models.CharField(max_length=15, unique=True)
     UyePASSWORD = models.CharField(max_length=128)
     UyeEMAIL = models.EmailField(max_length=50, unique=True)
