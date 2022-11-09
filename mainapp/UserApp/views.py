@@ -119,9 +119,7 @@ def signup(request):
             'succ': 'Kayıt islemi basarili'
             })
 
-    return render(request, 'signup.html', {
-            'discord': 'https://google.com'
-            })
+    return render(request, 'signup.html')
 
 def getAllFirma():
     return Firma.objects.filter(FirmaDURUM=True)
@@ -138,6 +136,8 @@ def settings(request):
     refreshAcc(request, UserID)
     adresList = getAdresList(UserID)
 
+    dcAut = UyeDiscordLog.objects.filter(UyeID = Uye(UyeID=UserID), TOKENDURUM=False).first()
+
     WalletDate = UyeWalletLog.objects.filter(UyeID = Uye(UyeID = UserID), UyeWalletLogIslem = WalletLogStatus.YUKLEME).last()
     WalletLog = getWalletLog(UserID)
     FirmaList = getAllFirma()
@@ -146,7 +146,8 @@ def settings(request):
         'adresList': adresList,
         'WalletDate': WalletDate,
         'WalletLog': WalletLog,
-        'FirmaList': FirmaList
+        'FirmaList': FirmaList,
+        'dcAut': dcAut
     }
     return render(request, 'settings.html', context=content)
 
@@ -298,7 +299,7 @@ def UyeDiscordLog_Save(request, DiscordID, userID):
     refreshAcc(request, userID)
     return render(request, 'settings.html', {
                 'session': request.session,
-                'passwdsucc':'Discord ID kaydedildi, hesabınızı onaylamak için Discord sunucumuzda size özel kanalda ilgili cevabı 1 dk içinde girin. Aksi taktirde işlem iptal edilir',
+                'passwdsucc':'Discord ID kaydedildi, hesabınızı onaylamak için Discord sunucumuzda size özel kanalda ilgili cevabı 5 dk içinde girin. Aksi taktirde işlem iptal edilir',
                 'answer': '!activate '+ Token
             })
 

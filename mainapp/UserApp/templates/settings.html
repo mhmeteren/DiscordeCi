@@ -85,12 +85,13 @@
         <div class="content">
             <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
-                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                <a href="#" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
                 </a>
                 <a href="#" class="sidebar-toggler flex-shrink-0">
                     <i class="fa fa-bars"></i>
                 </a>
+                <button type="button" onclick="window.location = '{{discord}}'"  class="btn btn-lg btn-lg-square btn-primary m-2"><i  class="fab fa-discord"></i></button>
                
                
                 <div class="navbar-nav align-items-center ms-auto">
@@ -119,7 +120,7 @@
                             
                         </div>
                         
-                        
+                      
                     </div>
 
                 
@@ -132,6 +133,7 @@
                             <a href="{% url 'user_logout'%}" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
+                    
                 </div>
             </nav>
             <!-- Navbar End -->
@@ -257,7 +259,7 @@
                                 {%endif%}
                                 {% if answer is not None%}
                                 <div class="alert alert-success"> {{answer}} </div>
-                                <div class="alert alert-danger"> Eğer sunucuya üye değilseniz sağ üst köşedeki Discord button una tıklayın </div>
+                                <div class="alert alert-danger"> Eğer sunucuya üye değilseniz sol üst köşedeki Discord button una tıklayın </div>
                                 {%endif%}
                                 
 
@@ -280,6 +282,12 @@
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Save</button>
+
+                                {% if dcAut is not None%}
+                                <div class="alert alert-danger">Onay bekleyen hesabınız var!!</div>
+                                <div class="alert alert-success">!activate {{dcAut.TOKEN}}</div>
+                                {%endif%}
+
                                 {% if passwd is not None%}
                                  <div class="alert alert-danger"> {{passwd}} </div>
                                 {%endif%}
@@ -288,7 +296,7 @@
                                 {%endif%}
                                 {% if answer is not None%}
                                 <div class="alert alert-success"> {{answer}} </div>
-                                <div class="alert alert-danger"> Eğer sunucuya üye değilseniz sağ üst köşedeki Discord button una tıklayın </div>
+                                <div class="alert alert-danger"> Eğer sunucuya üye değilseniz sol üst köşedeki Discord button una tıklayın </div>
                                 {%endif%}
                             </form>
                             {%endif%}
@@ -335,6 +343,11 @@
                                         <input type="text" class="form-control" maxlength="11"  name="tc" placeholder="00000000000" required>
                                     </div>
                                 </div>
+                                
+                                {% if dcAut is not None%}
+                                <div class="alert alert-danger">Onay bekleyen hesabınız var!!</div>
+                                <div class="alert alert-success">!activate {{dcAut.TOKEN}}</div>
+                                {%endif%}
 
                                 {% if Adres is not None%}
                                 <div class="alert alert-success"> {{Adres}} </div>
