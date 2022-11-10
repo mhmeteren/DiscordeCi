@@ -249,7 +249,7 @@ def DcUpdate(request):
 
 
     DiscordID = str(request.POST["newdiscordid"]).replace(' ','')
-    if len(DiscordID) != 19 or DcidControl(DiscordID, userID):
+    if  DcidControl(DiscordID, userID):
         return render(request, 'settings.html', {
             'session': request.session,
             'errorDiscordid':'Girilen yeni Discord ID yanlış',
@@ -276,7 +276,7 @@ def DcSave(request):
            
             })
 
-    if len(dc) != 19 or DcidControl(dc, userID):
+    if  DcidControl(dc, userID):
         return render(request, 'settings.html', {
             'session': request.session,
             'passwd': 'Girilen Discord id  yanlış veya kullanılamaz!!'
