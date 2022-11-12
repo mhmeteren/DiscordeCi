@@ -241,7 +241,8 @@ def DcUpdate(request):
             'answer': '!activate '+ dc_log.TOKEN
         })
 
-    if request.session.get('DiscordID') != str(request.POST["mydiscordid"]).replace(' ',''):
+    mydc = str(request.POST["mydiscordid"]).replace(' ','')
+    if request.session.get('DiscordID') != mydc:
         return render(request, 'settings.html', {
             'session': request.session,
             'errorDiscordid':'Girilen Discord ID yanlış',
@@ -249,7 +250,7 @@ def DcUpdate(request):
 
 
     DiscordID = str(request.POST["newdiscordid"]).replace(' ','')
-    if  DcidControl(DiscordID, userID):
+    if  DcidControl(DiscordID, userID) or DiscordID == mydc:                 #burasnı yeni ekledim!!! => or DiscordID == mydc: 
         return render(request, 'settings.html', {
             'session': request.session,
             'errorDiscordid':'Girilen yeni Discord ID yanlış',

@@ -3,6 +3,8 @@ from UserApp.api import views as api_views
 
 
 urlpatterns = [
-    path('DiscordAcc/<int:pk>', api_views.UyeAccListCreateAPIView.as_view(), name="DiscordLog"),
+    path('DiscordAcc/<int:pk>', api_views.UyeDiscordAccListCreateAPIView.as_view(), name="DiscordLog"),
     path('User/<int:pk>', api_views.UyeAPIView.as_view(), name="uye"),
+    path('DeadUser/<int:pk>', api_views.UyeAccisDeadAPIView.as_view(), name="Deaduye"),
+
 ]

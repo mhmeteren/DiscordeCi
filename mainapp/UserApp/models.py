@@ -97,3 +97,13 @@ class UyeDiscordLog(models.Model):
         db_table = "UyeDiscordLog"
 
 #-----------------------------------------------------------------------------------------------------------------------------------
+
+class UyeAccisDead(models.Model):
+    DeadID = models.AutoField(primary_key=True)
+    DiscordID = models.CharField(max_length=25, editable=True)
+    FirmaID = models.ForeignKey(Firma, on_delete=models.CASCADE, name = "FirmaID")
+    DeadDate = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "UyeAccisDead"
+#-----------------------------------------------------------------------------------------------------------------------------------
