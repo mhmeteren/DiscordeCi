@@ -5,7 +5,7 @@ from django.views.decorators.http import require_http_methods
 
 from hashlib import sha256
 from secrets import token_hex
-from .models import Uye, UyeAcc,Firma, UyeDiscordLog, UyeAdres,  WalletLogStatus, UyeWalletLog
+from .models import *
 from decimal import Decimal
 
 
@@ -308,8 +308,9 @@ def UyeDiscordLog_Save(request, DiscordID, userID):
 def DcidControl(DiscordID, userID):
     dc_user = Uye.objects.filter(DiscordID=DiscordID).first()
     dc_log = UyeDiscordLog.objects.filter(~Q(UyeID=Uye(UyeID=userID)) ,DiscordID=DiscordID, TOKENDURUM=False).first()
-    return (dc_log is not None or dc_user is not None)
-
+    dc_dead = UyeAccisDead.objects.filter(DiscordID=DiscordID)                                             #yeni eklendi, test edilmedi!!
+    return (dc_log is not None or dc_user is not None or dc_dead is not None)
+    #return (dc_log or dc_user or dc_dead)
 
 def getAdresList(UserID):
     return UyeAdres.objects.filter(UyeID=(Uye(UyeID=UserID)))

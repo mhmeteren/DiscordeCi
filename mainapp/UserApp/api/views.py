@@ -59,9 +59,9 @@ class UyeAPIView(APIView):
         """
         gelen UyeID ile o üyenin daha önceki Discord hesabının
         bulunduğu sunuculardan yetkisizleştrilmesi için UyeAccisDead Tablosuna
-        FirmaID ile ilgili DiscordId yi ekliyoruz, Role botları beli süre içinde
-        gelip ilgili FirmaID ile bu Class a bir get request atıyor ve yetkisizleştrilecek Discord hesaplarını 
-        respons da alıp gerekli işlemi yapıyor. 
+        FirmaID ile ilgili DiscordId yi ekliyoruz, Role botları beli bir süre içinde
+        gelip ilgili FirmaID ile UyeAccisDeadAPIView Class ına bir get request atıyor ve yetkisizleştrilecek Discord hesaplarını 
+        respons da alıp gerekli işlemi yapıyor. Daha sonrada  UyeAccisDeadAPIView Class ına delete request i ile tabloda ki kayıtları siliyor.
         """
 
         _user, uyeAccList = self.get_LastDiscordID(pk)
@@ -84,9 +84,9 @@ class UyeAPIView(APIView):
 
 class UyeAccisDeadAPIView(APIView):
 
-    def get_object(self, pk):
-        dead_instance = get_object_or_404(UyeAccisDead, DeadID=pk)
-        return dead_instance
+    # def get_object(self, pk):
+    #     dead_instance = get_object_or_404(UyeAccisDead, DeadID=pk)
+    #     return dead_instance
 
 
 
