@@ -102,3 +102,15 @@ class UyeAccisDeadAPIView(APIView):
         uye = UyeAccisDead.objects.filter(FirmaID=pk)
         uye.delete()
         return Response(status= status.HTTP_204_NO_CONTENT)
+
+class UyeAccPermissionsControl(APIView):
+
+    def get(self, request, pk):
+        UyeAccList = UyeAcc.objects.filter(FirmaID = pk)
+        DiscordIDList = []
+        for uye in UyeAccList:
+            DiscordIDList.append(uye.UyeID)
+        
+        serializer = UyeSerializer(DiscordIDList, many=True)
+        return Response(serializer.data)
+        
