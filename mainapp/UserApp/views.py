@@ -64,7 +64,7 @@ def index(request):
     return _Return_index(request, UserID)
 
 """
-index sayfasının GET motodu ve 
+index sayfasının GET metodu ve 
 Token ekledikten sonra yönlendirme  için
 """
 def _Return_index(request, UserID):
@@ -112,7 +112,7 @@ def signup(request):
         
        
         uye = Uye(UyeUSERNAME = request.POST["username"],
-        UyePASSWORD = getHASH(request.POST["password"]),
+        UyePASSWORD = request.POST["password"],
         UyeEMAIL = request.POST["email"])
         uye.save()
         return render(request, 'signup.html', {
@@ -178,10 +178,13 @@ def AccUpdate(request):
             'session': request.session,
             'Accerror': 'Girilen Username kullanılamaz!!'
         })
+
     durum = True if request.POST.get('dc', bool(request.session.get('UyeDURUM'))) == 'on' else False
+
     Uye.objects.filter(UyeID=int(request.session.get('UyeID'))).update(UyeUSERNAME=request.POST["username"],
     UyeEMAIL=request.POST["email"], UyeDURUM=durum)
-    refreshAcc(request, int(request.session.get('UyeID')))
+
+    refreshAcc(request, UserID)
     content = { 
     'session': request.session,
     'Accsuccess': 'işlem başarılı'
