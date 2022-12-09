@@ -47,6 +47,8 @@ class UyeAcc(models.Model):
         AccList = UyeAcc.objects.filter(UyeID = self.UyeID.UyeID)
         return AccList
 
+    def __str__(self):
+        return self.UyeID
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 class UyeAdres(models.Model):
@@ -62,6 +64,8 @@ class UyeAdres(models.Model):
     class Meta:
         db_table = "UyeAdres"
 
+    def __str__(self):
+        return self.UyeID
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 class WalletLogStatus(models.TextChoices):
@@ -82,6 +86,8 @@ class UyeWalletLog(models.Model):
     class Meta:
         db_table = "UyeWalletLog"
 
+    def __str__(self):
+        return self.UyeID
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 class UyeDiscordLog(models.Model):
@@ -96,6 +102,8 @@ class UyeDiscordLog(models.Model):
     class Meta:
         db_table = "UyeDiscordLog"
 
+    def __str__(self):
+        return self.UyeID
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 class UyeAccisDead(models.Model):
@@ -106,4 +114,7 @@ class UyeAccisDead(models.Model):
 
     class Meta:
         db_table = "UyeAccisDead"
+
+    def __str__(self):
+        return f'{self.FirmaID} - {self.DiscordID}'
 #-----------------------------------------------------------------------------------------------------------------------------------

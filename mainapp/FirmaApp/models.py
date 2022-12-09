@@ -47,7 +47,9 @@ class Discord(models.Model):
 
     def get_Discord_Status(self):
         return Discord.objects.get(FirmaID=self.FirmaID)
-        
+    
+    def __str__(self):
+        return self.FirmaID
 
 
 #--------------------------------------------------------------------------------------------------------------------------------
