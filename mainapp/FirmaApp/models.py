@@ -51,3 +51,20 @@ class Discord(models.Model):
 
 
 #--------------------------------------------------------------------------------------------------------------------------------
+
+class apiaccessChoices(models.TextChoices):
+    UserAuth = 'UserAuth'
+    Products = 'Products'
+
+
+class apiaccess(models.Model):
+    apiaccessID = models.AutoField(primary_key=True)
+    FirmaID = models.ForeignKey(Firma, on_delete=models.CASCADE)
+    API = models.CharField(max_length=50, choices=apiaccessChoices.choices)
+    APIUrl = models.URLField(max_length=200)
+
+    class Meta:
+        db_table = "apiaccess"
+        
+    def __str__(self):
+        return f'Firma: {self.FirmaID} - API: {self.API} - APIUrl: {self.APIUrl}'

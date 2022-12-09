@@ -3,10 +3,14 @@ from django.db.models import Q
 from django.views.decorators.http import require_http_methods
 
 
+from .APIscripts.user_scripts import *
+
 from hashlib import sha256
 from secrets import token_hex
 from .models import *
 from decimal import Decimal
+
+import json
 
 
 def getHASH(password):
@@ -67,10 +71,15 @@ def index(request):
 index sayfasının GET metodu ve 
 Token ekledikten sonra yönlendirme  için
 """
-def _Return_index(request, UserID):
+def _Return_index(request, UserID, TokenContent=None):
     acc = UyeAcc(UyeID=Uye(UyeID=UserID))
     acclist = acc.get_All_Firma()
     
+    
+    temp = None
+    if TokenContent:
+        tempstr = json.loads(TokenContent)
+        temp = f'Yeni Eklenen TOKEN Sahibi: {tempstr["UserName"]} {tempstr["UserSurename"]}'
 
     refreshAcc(request, UserID)
     WalletDate = UyeWalletLog.objects.filter(UyeID = Uye(UyeID = UserID), UyeWalletLogIslem = WalletLogStatus.YUKLEME).last()
@@ -78,7 +87,8 @@ def _Return_index(request, UserID):
     content = { 
         'session': request.session,
         'acclist': acclist,
-        'WalletDate': WalletDate
+        'WalletDate': WalletDate,
+        'TokenContent': temp
     }
 
     return render(request, 'UserHome.html', context=content)
@@ -429,22 +439,28 @@ def addToken(request):
             'addTokenError':'Girilen parola yanlış',
             'FirmaList': FirmaList
         })
-    
+
+
+    firma = Firma(FirmaID = int(request.POST["firma"]))
     token = request.POST["token"][:128]
-    """ Unique TOKEN"""
-    if UyeAcc.objects.filter(UyeAccTOKEN=token).first() is not None:
+    UserAuth = UserTokenAut(firma, token) # Ilgili firmanın sağladıdı APı ile TOKEN dogrulama. from APIscripts.user_scripts
+    
+    """ Unique TOKEN and TOKEN Control with API"""
+    if UyeAcc.objects.filter(UyeAccTOKEN=token).first() is not None or UserAuth is None:
         return render(request, 'settings.html', {
             'session': request.session,
             'addTokenError':'Girilen TOKEN eksik veya hattalı!!',
             'FirmaList': FirmaList
         })
 
+
+
+
     """Bir firmaya sadece bir token eklenebilir"""
-    firma = Firma(FirmaID = int(request.POST["firma"])) 
     UyeAcc.objects.filter(UyeID = Uye(UyeID = userID), FirmaID = firma).delete()
 
     uyeacc = UyeAcc(UyeID = Uye(UyeID = userID), FirmaID = firma,
     UyeAccTOKEN = token)
 
     uyeacc.save()
-    return _Return_index(request, userID)
+    return _Return_index(request, userID, UserAuth)
