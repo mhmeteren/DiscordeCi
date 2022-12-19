@@ -25,6 +25,8 @@
     <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css'%}" rel="stylesheet">
     <link href="{% static 'lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css'%}" rel="stylesheet" />
 
+
+
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
@@ -176,6 +178,7 @@
                             <div class="ms-3">
                                 <p class="mb-2">Toplam Hesap</p>
                                 <h6 class="mb-0">{{acclist | length}}</h6>
+                    
                             </div>
                         </div>
                     </div>
@@ -192,12 +195,12 @@
                 <div class="bg-light text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
                         <h6 class="mb-0">Tüm Alişveriş Hesapları </h6>
-                        </div>
+                        
                         {% if TokenContent is not None%}
                                 <div class="alert alert-success"> {{TokenContent}}</div>
                         {%endif%}
                         
-                    
+                    </div>
                     <div class="table-responsive">
                         <table class="table text-start align-middle table-bordered table-hover mb-0">
                             <thead>

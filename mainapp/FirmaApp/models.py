@@ -18,7 +18,7 @@ class Firma(models.Model):
         verbose_name_plural = "Firmalar"
     
     def __str__(self):
-        return self.FirmaADI
+        return f"{self.FirmaADI}"
  
     def auth(self):
         firma = Firma.objects.filter(FirmaEMAIL=self.FirmaEMAIL, FirmaSIFRE=self.FirmaSIFRE).first()
@@ -49,7 +49,7 @@ class Discord(models.Model):
         return Discord.objects.get(FirmaID=self.FirmaID)
     
     def __str__(self):
-        return self.FirmaID
+        return f"{self.FirmaID.FirmaADI}"
 
 
 #--------------------------------------------------------------------------------------------------------------------------------

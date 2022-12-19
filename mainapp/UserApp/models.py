@@ -48,7 +48,7 @@ class UyeAcc(models.Model):
         return AccList
 
     def __str__(self):
-        return self.UyeID
+        return f"{self.UyeID}"
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 class UyeAdres(models.Model):
@@ -65,14 +65,13 @@ class UyeAdres(models.Model):
         db_table = "UyeAdres"
 
     def __str__(self):
-        return self.UyeID
+        return f"{self.UyeID}"
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 class WalletLogStatus(models.TextChoices):
     YUKLEME = 'YUKLEME', 'Yükleme'
     ALISVERIS = 'ALISVERIS', 'AlisVeris'
 
-    
 
 class UyeWalletLog(models.Model):
 
@@ -87,7 +86,7 @@ class UyeWalletLog(models.Model):
         db_table = "UyeWalletLog"
 
     def __str__(self):
-        return self.UyeID
+        return f"{self.UyeID}"
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 class UyeDiscordLog(models.Model):
@@ -103,7 +102,7 @@ class UyeDiscordLog(models.Model):
         db_table = "UyeDiscordLog"
 
     def __str__(self):
-        return self.UyeID
+        return f"{self.UyeID}"
 #-----------------------------------------------------------------------------------------------------------------------------------
 
 class UyeAccisDead(models.Model):

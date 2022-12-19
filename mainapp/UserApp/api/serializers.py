@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from UserApp.models import Uye, UyeDiscordLog, UyeAccisDead
+from UserApp.models import Uye, UyeDiscordLog, UyeAccisDead, UyeAcc
 
 
 
@@ -26,3 +26,10 @@ class UyeAccisDeadSerializer(serializers.ModelSerializer):
         model = UyeAccisDead
         fields = '__all__'
         read_only_fields = ['DeadID', 'DeadDate']
+
+
+class UyeAccSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UyeAcc
+        fields = '__all__'
