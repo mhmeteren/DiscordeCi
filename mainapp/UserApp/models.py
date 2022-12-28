@@ -54,7 +54,7 @@ class UyeAcc(models.Model):
 class UyeAdres(models.Model):
 
     UyeAdresID = models.AutoField(primary_key=True)
-    UyeID = models.ForeignKey(Uye, on_delete=models.CASCADE, name = "UyeID")
+    UyeID = models.ForeignKey(Uye, on_delete=models.CASCADE, name = "UyeID", related_name="UyeAdres")
     UyeAdresBASLIK = models.CharField(max_length=50)
     UyeAdresALICI = models.CharField(max_length=50)
     UyeAdres = models.CharField(max_length=300)
@@ -116,4 +116,21 @@ class UyeAccisDead(models.Model):
 
     def __str__(self):
         return f'{self.FirmaID} - {self.DiscordID}'
+#-----------------------------------------------------------------------------------------------------------------------------------
+
+class UyeAlisverisLog(models.Model):
+
+    LogID = models.AutoField(primary_key=True)
+    Uye = models.ForeignKey(Uye, on_delete=models.CASCADE, name = "Uye")
+    Firma = models.ForeignKey(Firma, on_delete=models.CASCADE, name = "Firma")
+    WalletBalance = models.DecimalField(max_digits=15, decimal_places=2)
+    WalletLogAmount = models.DecimalField(max_digits=15, decimal_places=2)
+    LogTARIH = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "UyeAlisverisLog"
+
+    def __str__(self):
+        return f"Uye: {self.Uye}, Firma: {self.Firma}"
+
 #-----------------------------------------------------------------------------------------------------------------------------------
