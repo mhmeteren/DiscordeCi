@@ -28,7 +28,7 @@ def login(request):
         
 
         if not user:
-            return render(request, 'signin.html', {
+            return render(request, 'login.html', {
             'error': 'email, username veya password yanlış!!'
             })
         
