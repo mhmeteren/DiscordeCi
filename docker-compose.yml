@@ -4,7 +4,7 @@ services:
   web:
     build: .
     ports:
-      - 1337:8000
+      - 8000:8000
     depends_on:
       - db
 
